@@ -4,15 +4,13 @@ node {
   }
 
   stage("Compilation") {
-    sh "./mvn clean install -DskipTests"
+    mvn clean package
   }
 
-  stage("Tests and Deployment") {
-    stage("Runing unit tests") {
-      sh "./mvn test -Punit"
-    }
-    stage("Deployment") {
-      sh 'nohup ./mvn spring-boot:run -Dserver.port=8001 &'
-    }
+  stage("build docker image") {
+    docker build -t estorebk .
   }
+
+  stage("create container"){
+    docker run -d -p 8181:8080 --name estorebackend estorebk:latest
 }
