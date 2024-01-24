@@ -1,16 +1,41 @@
-node {
-  stage("Clone the project") {
-    git branch: 'main', url: 'https://github.com/p3iyaji/estorebackend.git'
+pipeline {
+  agent any 
+  tools{
+    maven 'MAVEN'        
   }
+  stages{
+      stage("Clone the project") {
+          steps{
+            git branch: 'main', url: 'https://github.com/p3iyaji/estorebackend.git'
+          }
+      }
 
-  stage("Compilation") {
-    mvn clean package
-  }
+      stage("Compilation") {
+          steps{
+            sh 'mvn clean install'
+          }
+        
+      }
+    
+      stage("build docker image") {
+          steps{
+              script{
+                sh 'docker build -t estorebkjen .'
+              }
+            
+          }
+        
+      }
+    
+      stage("create container"){
+          steps{
+              script{
+                sh 'docker run -d -p 8080:8080 --name estorebackendjen estorebkjen:latest'
+              }
+            
+          }
+      }
+    }
+  
 
-  stage("build docker image") {
-    docker build -t estorebk .
-  }
-
-  stage("create container"){
-    docker run -d -p 8181:8080 --name estorebackend estorebk:latest
 }
