@@ -18,7 +18,7 @@ import com.example.estorebackend.model.Users;
 import com.example.estorebackend.repository.UsersRepository;
 
 @RestController
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://3.93.55.86" })
 @RequestMapping("/users")
 public class UsersController {
 
